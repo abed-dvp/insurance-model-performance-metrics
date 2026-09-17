@@ -26,4 +26,4 @@ Predict whether a customer belongs to a cheap or expensive insurance-cost class.
 
 ## Project Status
 
-Step 3 — Regression Baseline and Metrics
+Step 4 — KNN Hyperparameters and Cross Validation
