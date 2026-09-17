@@ -26,4 +26,4 @@ Predict whether a customer belongs to a cheap or expensive insurance-cost class.
 
 ## Project Status
 
-Step 5 — Classification Metrics
+Step 6 — Thresholds, Precision–Recall, and ROC-AUC
