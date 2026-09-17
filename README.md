@@ -26,4 +26,4 @@ Predict whether a customer belongs to a cheap or expensive insurance-cost class.
 
 ## Project Status
 
-Step 4 — KNN Hyperparameters and Cross Validation
+Step 5 — Classification Metrics
