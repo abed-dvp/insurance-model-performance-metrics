@@ -1,10 +1,10 @@
-﻿# Insurance Model Performance Metrics
+# Insurance Model Performance Metrics
 
 ## Project Goal
 
 This project investigates how different machine learning evaluation metrics tell fundamentally different stories about model behavior on the exact same dataset. Using the Medical Insurance Charges dataset, we evaluate both:
 - **Regression**: Predicting continuous medical charges (`charges`) in dollars.
-- **Classification**: Predicting whether an individual's medical cost belongs to a `cheap` or `expensive` risk tier.
+- **Classification**: Predicting whether an individual's medical cost belongs to a `cheap` or `expensive` cost group.
 
 ## Dataset
 
@@ -42,7 +42,7 @@ Evaluated on the 30% holdout test set (402 samples):
 
 | Model | $R^2$ | MAE ($) | RMSE ($) | Max Error ($) |
 |---|---|---|---|---|
-| **DummyRegressor (mean)** | `-0.0000` | `8,426.33` | `11,390.13` | `41,866.37` |
+| **DummyRegressor (Mean)** | `-0.0000` | `8,426.33` | `11,390.13` | `41,866.37` |
 | **KNN Regressor ($K=5$)** | `0.7298` | `3,588.39` | `5,921.13` | `28,240.34` |
 
 5-Fold Cross-Validation on the training partition yielded a Mean CV $R^2$ of `0.7406` (fold range `0.6538` to `0.7869`), Mean CV MAE of `$3,910.84`, and Mean CV RMSE of `$6,300.38`, confirming that test performance is broadly consistent with cross-validation estimates.
@@ -63,11 +63,11 @@ Lowering the decision threshold from $0.5$ to $\ge 0.4$ achieved the hypothetica
 
 - **Baselines provide essential context**: A model with 44% accuracy or $R^2 \approx 0.0$ establishes the performance floor of naive majority/mean guessing.
 - **Different regression metrics capture different error behaviors**: MAE measures typical dollar error, RMSE penalizes large errors quadratically, and Max Error bounds the worst single failure.
-- **Distance-based algorithms require strict scaling**: KNN relies directly on distance geometry; unscaled features or arbitrary distance metrics ($p$) fundamentally change neighborhood formation.
-- **Accuracy alone is insufficient**: Accuracy conceals error asymmetry. In insurance risk management, failing to detect an expensive patient (False Negative) is often far more costly than an unnecessary review (False Positive).
-- **Thresholds shift trade-offs without retraining**: Precision and Recall trade off directly; operational requirements determine the optimal decision threshold.
+- **Distance-based algorithms such as KNN are sensitive to feature scale, so scaling is important when features use different numerical ranges.**
+- **Accuracy alone is insufficient**: Accuracy conceals error asymmetry. In the hypothetical recall-focused scenario used in this project, False Negatives were treated as more costly than False Positives.
+- **Thresholds shift trade-offs without retraining**: Precision and Recall trade off directly; an explicit business objective or error-cost trade-off can guide the choice of operating threshold.
 - **ROC-AUC evaluates ranking power**: Test ROC-AUC of `0.9416` demonstrates strong class-separation ability across all possible operating thresholds.
-- **Aggregate metrics must be complemented by error & cohort analysis**: Aggregate numbers masked that KNN achieves 100% recall on smokers, while almost all severe prediction errors occur on non-smokers who experienced unexpected medical complications.
+- **Aggregate metrics must be complemented by error & cohort analysis**: Aggregate numbers masked that KNN achieves 100% recall on smokers, while almost all severe prediction errors occur on non-smokers with unusually high observed charges.
 
 ## Methodology Safeguards
 
@@ -77,8 +77,9 @@ Lowering the decision threshold from $0.5$ to $\ge 0.4$ achieved the hypothetica
 - The binary classification threshold was derived exclusively from `y_train.median()`.
 - The custom decision threshold was selected solely from training out-of-fold cross-validation probabilities without looking at test labels.
 
-## Limitations
+## Scope & Limitations
 
+- **Curriculum Scope & Model Focus**: All concepts in the project's Lesson Coverage checklist (44 / 44) were implemented. While LinearRegression was introduced as an illustrative reference example in the lesson, this portfolio project intentionally focused its real-model experiments on K-Nearest Neighbors (KNN).
 - **Educational target definition**: The classification boundary is based on a simple median split rather than commercial underwriting guidelines or actuarial risk brackets.
 - **Discrete KNN probability granularity**: With $K=5$ and uniform voting, predicted probabilities exist in discrete steps of $0.2$ ($0.0, 0.2, 0.4, 0.6, 0.8, 1.0$), limiting fine-grained threshold calibration compared to parametric models.
 - **Lesson-style CV preprocessing**: Preprocessing before CV was fitted on the full training partition per lesson curriculum, rather than inside each fold via a Pipeline.
